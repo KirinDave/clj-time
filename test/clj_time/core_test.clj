@@ -11,7 +11,7 @@
     (is (= 1970 (year e)))
     (is (= 0 (second e)))))
 
-(deftest test-datetime
+(deftest test-datetime-and-accessors
   (let [d (datetime 1986)]
     (is (= 1986 (year   d)))
     (is (= 1    (month  d)))
