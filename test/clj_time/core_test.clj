@@ -49,10 +49,14 @@
     (is (> (.getMillis dt1) (.getMillis dt2)))))
 
 (deftest test-after?
-  (is (after? (date-time 1987) (date-time 1986))))
+  (is (after? (date-time 1987) (date-time 1986)))
+  (is (not (after? (date-time 1986) (date-time 1987))))
+  (is (not (after? (date-time 1986) (date-time 1986)))))
 
 (deftest test-before?
-  (is (before? (date-time 1986) (date-time 1987))))
+  (is (before? (date-time 1986) (date-time 1987)))
+  (is (not (before? (date-time 1987) (date-time 1986))))
+  (is (not (before? (date-time 1986) (date-time 1986)))))
 
 (deftest test-periods
   (is (= (date-time 1986 10 14 4 3 2)
@@ -92,6 +96,7 @@
         d3 (date-time 1987)]
     (is (contains? (interval d1 d3) d2))
     (is (not (contains? (interval d1 d2) d3)))
+    (is (not (contains? (interval d1 d2) d2)))
     (is (not (contains? (interval d2 d3) d1)))))
 
 (deftest test-overlaps?
