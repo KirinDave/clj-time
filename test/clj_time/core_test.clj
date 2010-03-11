@@ -4,7 +4,7 @@
         clj-time.core))
 
 (deftest test-now
-  (is (<= 2009 (year (now)))))
+  (is (<= 2010 (year (now)))))
 
 (deftest test-epoch
   (let [e (epoch)]
