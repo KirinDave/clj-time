@@ -1,31 +1,35 @@
 (ns clj-time.core
   (:refer-clojure :exclude (second contains?))
+  (:use [clojure.contrib.def :only (defvar)])
   (:import
     (org.joda.time DateTime DateTimeZone Period Interval)))
 
-(def #^{:tag DateTimeZone} utc
-  (DateTimeZone/UTC))
+(defvar utc
+  (DateTimeZone/UTC)
+  "DateTimeZone for UTC.")
 
 (defn now []
-  (DateTime. utc))
+  (DateTime. #^DateTimeZone utc))
 
 (defn epoch []
-  (DateTime. (long 0) utc))
+  (DateTime. (long 0) #^DateTimeZone utc))
 
 (defn date-time
   ([year]
-   (date-time year 1 1 0 0 0))
+   (date-time year 1 1 0 0 0 0))
   ([year month]
-   (date-time year month 1 0 0 0))
+   (date-time year month 1 0 0 0 0))
   ([year month day]
-   (date-time year month day 0 0 0))
+   (date-time year month day 0 0 0 0))
   ([year month day hour]
-   (date-time year month day hour 0 0))
+   (date-time year month day hour 0 0 0))
   ([year month day hour minute]
-   (date-time year month day hour minute 0))
+   (date-time year month day hour minute 0 0))
+  ([year month day hour minute second]
+   (date-time year month day hour minute second 0))
   ([#^Integer year #^Integer month #^Integer day #^Integer hour
-    #^Integer minute #^Integer second]
-   (DateTime. year month day hour minute second 0 utc)))
+    #^Integer minute #^Integer second #^Integer millis]
+   (DateTime. year month day hour minute second millis utc)))
 
 (defn year [#^DateTime dt]
   (.getYear dt))
@@ -53,6 +57,10 @@
 
 (defn time-zone-for-id [#^String id]
   (DateTimeZone/forID id))
+
+(defn default-time-zone []
+  "Returns the default DateTimeZone for the current environment."
+  (DateTimeZone/getDefault))
 
 (defn to-time-zone
   "Returns a new DateTime corresponding to the same absolute instant in time as
