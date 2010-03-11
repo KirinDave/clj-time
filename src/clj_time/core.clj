@@ -98,3 +98,6 @@
 
 (defn overlaps? [#^Interval i-a #^Interval i-b]
   (.overlaps i-a i-b))
+
+(defn abuts? [#^Interval i-a #^Interval i-b]
+  (.abuts i-a i-b))

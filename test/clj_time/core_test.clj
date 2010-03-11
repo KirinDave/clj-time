@@ -79,3 +79,13 @@
     (is (overlaps? (interval d1 d3) (interval d2 d3)))
     (is (not (overlaps? (interval d1 d2) (interval d2 d3))))
     (is (not (overlaps? (interval d1 d2) (interval d3 d4))))))
+
+(deftest test-abuts?
+  (let [d1 (date-time 1985)
+        d2 (date-time 1986)
+        d3 (date-time 1987)
+        d4 (date-time 1988)]
+    (is (abuts? (interval d1 d2) (interval d2 d3)))
+    (is (not (abuts? (interval d1 d2) (interval d3 d4))))
+    (is (not (abuts? (interval d1 d3) (interval d2 d3))))
+    (is (abuts? (interval d2 d3) (interval d1 d2)))))
