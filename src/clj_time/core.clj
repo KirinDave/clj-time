@@ -3,15 +3,17 @@
   (:import
     (org.joda.time DateTime DateTimeZone Period Interval)))
 
+(def utc (DateTimeZone/UTC))
+
 (defn now
   "Returns a DateTime for the current time in UTC."
   []
-  (DateTime. (DateTimeZone/UTC)))
+  (DateTime. #^DateTimeZone utc))
 
 (defn epoch
   "Returns a DateTime corresponding to the begining of the epoch in UTC."
   []
-  (DateTime. (long 0) (DateTimeZone/UTC)))
+  (DateTime. (long 0) #^DateTimeZone utc))
 
 (defn datetime
   ([year]
@@ -45,32 +47,20 @@
 (defn second [#^DateTime dt]
   (.getSecondOfMinute dt))
 
-(defn time-zone-for-offset-hours [#^Integer offset]
-  (DateTimeZone/forOffsetHours offset))
+(defn time-zone-for-offset
+  ([hours]
+   (DateTimeZone/forOffsetHours hours))
+  ([hours minutes]
+   (DateTimeZone/forOffsetHoursMinutes hours minutes)))
 
 (defn time-zone-for-id [#^String id]
   (DateTimeZone/forID id))
-
-(defn period [#^DateTime dt-a #^DateTime dt-b]
-  (Period. dt-a dt-b))
 
 (defn after? [#^DateTime dt-a #^DateTime dt-b]
   (.isAfter dt-a dt-b))
 
 (defn before? [#^DateTime dt-a #^DateTime dt-b]
   (.isBefore dt-a dt-b))
-
-(defn plus
-  ([#^DateTime dt #^Period p]
-   (.plus dt p))
-  ([dt p & [ps]]
-   (reduce #(plus %1 %2) (plus dt p) ps)))
-
-(defn minus
-  ([#^DateTime dt #^Period p]
-   (.minus dt p))
-  ([dt p & [ps]]
-   (reduce #(minus %1 %2) (minus dt p) ps)))
 
 (defn years [#^Integer n]
   (Period/years n))
@@ -89,6 +79,18 @@
 
 (defn seconds [#^Integer n]
   (Period/seconds n))
+
+(defn plus
+  ([#^DateTime dt #^Period p]
+   (.plus dt p))
+  ([dt p & ps]
+   (reduce #(plus %1 %2) (plus dt p) ps)))
+
+(defn minus
+  ([#^DateTime dt #^Period p]
+   (.minus dt p))
+  ([dt p & ps]
+   (reduce #(minus %1 %2) (minus dt p) ps)))
 
 (defn interval [#^DateTime dt-a #^DateTime dt-b]
   (Interval. dt-a dt-b))
