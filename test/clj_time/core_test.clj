@@ -13,8 +13,12 @@
 
 (deftest test-datetime
   (let [d (datetime 1986)]
-    (is (= 1986 (year d)))
-    (is (= 0 (second d))))
+    (is (= 1986 (year   d)))
+    (is (= 1    (month  d)))
+    (is (= 1    (day    d)))
+    (is (= 0    (hour   d)))
+    (is (= 0    (minute d)))
+    (is (= 0    (second d))))
   (let [d (datetime 1986 10 14 4 3 2)]
     (is (= 1986 (year   d)))
     (is (= 10   (month  d)))
