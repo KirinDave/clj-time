@@ -66,6 +66,9 @@
 (defn months [#^Integer n]
   (Period/months n))
 
+(defn weeks [#^Integer n]
+  (Period/weeks n))
+
 (defn days [#^Integer n]
   (Period/days n))
 
@@ -90,6 +93,23 @@
   ([dt p & ps]
    (reduce #(minus %1 %2) (minus dt p) ps)))
 
+(defn period [#^DateTime dt-a #^DateTime dt-b]
+  (Period. dt-a dt-b))
+
+(defn in-weeks [#^Period p]
+  (.. p toStandardWeeks getWeeks))
+
+(defn in-days [#^Period p]
+  (.. p toStandardDays getDays))
+
+(defn in-hours [#^Period p]
+  (.. p toStandardHours getHours))
+
+(defn in-minutes [#^Period p]
+  (.. p toStandardMinutes getMinutes))
+
+(defn in-seconds [#^Period p]
+  (.. p toStandardSeconds getSeconds))
 (defn interval [#^DateTime dt-a #^DateTime dt-b]
   (Interval. dt-a dt-b))
 

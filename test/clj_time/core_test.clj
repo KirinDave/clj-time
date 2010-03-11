@@ -48,7 +48,9 @@
            (days 13)
            (hours 4)
            (minutes 3)
-           (seconds 2)))))
+           (seconds 2))))
+  (is (= (date-time 1986 1 8)
+         (plus (date-time 1986 1 1) (weeks 1)))))
 
 (deftest test-plus
   (is (= (date-time 1986 10 14 6)
@@ -61,6 +63,14 @@
          (minus (date-time 1986 10 14 6) (hours 2))))
   (is (= (date-time 1986 10 14 4 2)
          (minus (date-time 1986 10 14 6 5) (hours 2) (minutes 3)))))
+
+(deftest test-period-in
+  (let [p (period (date-time 1986 10 14 12 5 4) (date-time 1986 11 3  22 2 6))]
+    (is (= 2       (in-weeks p)))
+    (is (= 20      (in-days p)))
+    (is (= 489     (in-hours p)))
+    (is (= 29397   (in-minutes p)))
+    (is (= 1763822 (in-seconds p)))))
 
 (deftest test-contains?
   (let [d1 (date-time 1985)
