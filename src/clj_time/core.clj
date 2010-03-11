@@ -54,6 +54,20 @@
 (defn time-zone-for-id [#^String id]
   (DateTimeZone/forID id))
 
+(defn to-time-zone
+  "Returns a new DateTime corresponding to the same absolute instant in time as
+   the given DateTime, but with calendar fields corresponding to the given
+   TimeZone."
+  [#^DateTime dt #^DateTimeZone tz]
+  (.withZone dt tz))
+
+(defn from-time-zone
+  "Returns a new DateTime corresponding to the same point in calendar time as
+  the given DateTime, but for a correspondingly different absolute instant in
+  time."
+  [#^DateTime dt #^DateTimeZone tz]
+  (.withZoneRetainFields dt tz))
+
 (defn after? [#^DateTime dt-a #^DateTime dt-b]
   (.isAfter dt-a dt-b))
 

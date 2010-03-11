@@ -34,6 +34,20 @@
 (deftest test-time-zone-for-id
   (is (= utc (time-zone-for-id "UTC"))))
 
+(deftest test-to-time-zone
+  (let [tz  (time-zone-for-offset 2)
+        dt1 (date-time 1986 10 14 6)
+        dt2 (to-time-zone dt1 tz)]
+    (is (= 8 (hour dt2)))
+    (is (= (.getMillis dt1) (.getMillis dt2)))))
+
+(deftest test-from-time-zone
+  (let [tz  (time-zone-for-offset 2)
+        dt1 (date-time 1986 10 14 6)
+        dt2 (from-time-zone dt1 tz)]
+    (is (= 6 (hour dt2)))
+    (is (> (.getMillis dt1) (.getMillis dt2)))))
+
 (deftest test-after?
   (is (after? (date-time 1987) (date-time 1986))))
 
