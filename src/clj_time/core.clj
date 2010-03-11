@@ -12,17 +12,17 @@
 (defn epoch []
   (DateTime. (long 0) utc))
 
-(defn datetime
+(defn date-time
   ([year]
-   (datetime year 1 1 0 0 0))
+   (date-time year 1 1 0 0 0))
   ([year month]
-   (datetime year month 1 0 0 0))
+   (date-time year month 1 0 0 0))
   ([year month day]
-   (datetime year month day 0 0 0))
+   (date-time year month day 0 0 0))
   ([year month day hour]
-   (datetime year month day hour 0 0))
+   (date-time year month day hour 0 0))
   ([year month day hour minute]
-   (datetime year month day hour minute 0))
+   (date-time year month day hour minute 0))
   ([year month day hour minute second]
    (DateTime. year month day hour minute second 0 utc)))
 

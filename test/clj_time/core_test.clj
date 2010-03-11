@@ -11,15 +11,15 @@
     (is (= 1970 (year e)))
     (is (= 0 (second e)))))
 
-(deftest test-datetime-and-accessors
-  (let [d (datetime 1986)]
+(deftest test-date-time-and-accessors
+  (let [d (date-time 1986)]
     (is (= 1986 (year   d)))
     (is (= 1    (month  d)))
     (is (= 1    (day    d)))
     (is (= 0    (hour   d)))
     (is (= 0    (minute d)))
     (is (= 0    (second d))))
-  (let [d (datetime 1986 10 14 4 3 2)]
+  (let [d (date-time 1986 10 14 4 3 2)]
     (is (= 1986 (year   d)))
     (is (= 10   (month  d)))
     (is (= 14   (day    d)))
@@ -35,14 +35,14 @@
   (is (= utc (time-zone-for-id "UTC"))))
 
 (deftest test-after?
-  (is (after? (datetime 1987) (datetime 1986))))
+  (is (after? (date-time 1987) (date-time 1986))))
 
 (deftest test-before?
-  (is (before? (datetime 1986) (datetime 1987))))
+  (is (before? (date-time 1986) (date-time 1987))))
 
 (deftest test-periods
-  (is (= (datetime 1986 10 14 4 3 2)
-         (plus (datetime 1984)
+  (is (= (date-time 1986 10 14 4 3 2)
+         (plus (date-time 1984)
            (years 2)
            (months 9)
            (days 13)
@@ -51,30 +51,30 @@
            (seconds 2)))))
 
 (deftest test-plus
-  (is (= (datetime 1986 10 14 6)
-         (plus (datetime 1986 10 14 4) (hours 2))))
-  (is (= (datetime 1986 10 14 6 5)
-         (plus (datetime 1986 10 14 4 2) (hours 2) (minutes 3)))))
+  (is (= (date-time 1986 10 14 6)
+         (plus (date-time 1986 10 14 4) (hours 2))))
+  (is (= (date-time 1986 10 14 6 5)
+         (plus (date-time 1986 10 14 4 2) (hours 2) (minutes 3)))))
 
 (deftest test-minus
-  (is (= (datetime 1986 10 14 4)
-         (minus (datetime 1986 10 14 6) (hours 2))))
-  (is (= (datetime 1986 10 14 4 2)
-         (minus (datetime 1986 10 14 6 5) (hours 2) (minutes 3)))))
+  (is (= (date-time 1986 10 14 4)
+         (minus (date-time 1986 10 14 6) (hours 2))))
+  (is (= (date-time 1986 10 14 4 2)
+         (minus (date-time 1986 10 14 6 5) (hours 2) (minutes 3)))))
 
 (deftest test-contains?
-  (let [d1 (datetime 1985)
-        d2 (datetime 1986)
-        d3 (datetime 1987)]
+  (let [d1 (date-time 1985)
+        d2 (date-time 1986)
+        d3 (date-time 1987)]
     (is (contains? (interval d1 d3) d2))
     (is (not (contains? (interval d1 d2) d3)))
     (is (not (contains? (interval d2 d3) d1)))))
 
 (deftest test-overlaps?
-  (let [d1 (datetime 1985)
-        d2 (datetime 1986)
-        d3 (datetime 1987)
-        d4 (datetime 1988)]
+  (let [d1 (date-time 1985)
+        d2 (date-time 1986)
+        d3 (date-time 1987)
+        d4 (date-time 1988)]
     (is (overlaps? (interval d1 d3) (interval d2 d4)))
     (is (overlaps? (interval d1 d3) (interval d2 d3)))
     (is (not (overlaps? (interval d1 d2) (interval d2 d3))))
