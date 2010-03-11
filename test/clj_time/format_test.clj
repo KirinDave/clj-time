@@ -3,6 +3,11 @@
   (:use clojure.test
         (clj-time core format)))
 
+(deftest test-formatter
+  (let [fmt (formatter "yyyyMMdd")]
+    (is (= (date-time 2010 3 11)
+           (parse fmt "20100311")))))
+
 (deftest test-parse
   (let [fmt (formatters :date)]
     (is (= (date-time 2010 3 11)

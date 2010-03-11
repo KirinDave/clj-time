@@ -75,7 +75,7 @@
   (set/difference (set (keys formatters)) parsers))
 
 (defn formatter [#^String fmts]
-  (DateTimeFormat/forPattern fmts))
+  (.withZone (DateTimeFormat/forPattern fmts) #^DateTimeZone core/utc))
 
 (defn parse [#^DateTimeFormatter fmt #^String ds]
   (.parseDateTime fmt ds))
