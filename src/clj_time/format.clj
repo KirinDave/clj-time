@@ -1,7 +1,7 @@
 (ns clj-time.format
-  "Utilities for printing and parsing DateTimes as Strings.
+  "Utilities for parsing and unparsing DateTimes as Strings.
 
-   Printing and parsing are controlled by formatters. You can either use one
+   Parsing and printing are controlled by formatters. You can either use one
    of the built in ISO8601 formatters or define your own, e.g.:
 
      (def built-in-formatter (formatters :basic-date-time))
@@ -9,34 +9,32 @@
 
    To see a list of available built-in formatters and an example of a date-time
    printed in their format:
-
-     (show-printers)
-
-    Once you have a formatter, printing and parsing are straitforward:
-
-      => (parse custom-formatter \"20100311\")
-      #<DateTime 2010-03-11T00:00:00.000Z>
-
-      => (print custom-formatter (date-time 2010 10 3))
-      \"20101003\"
-
-    Note that print returns a String; it does not write to *out* or some other
-    stream. Also, note that the parse function always returns a DateTime
-    instance with a UTC time zone, and the print function always represents a
-    given DateTime instance in UTC."
-  (:refer-clojure :exclude (second contains? print))
-  (:use [clojure.contrib.def :only (defvar defvar-)])
-  (:require [clj-time.core :as core]
-            [clojure.set :as set])
+   
+    (show-formatters)
+   
+   Once you have a formatter, parsing and printing are strait-forward:
+   
+     => (parse custom-formatter \"20100311\")
+     #<DateTime 2010-03-11T00:00:00.000Z>
+   
+     => (unparse custom-formatter (date-time 2010 10 3))
+     \"20101003\"
+   
+   Note that the parse function always returns a DateTime instance with a UTC
+   time zone, and the unparse function always represents a given DateTime
+   instance in UTC."
+  (:use [clojure.contrib.def :only (defvar defvar-)]
+        [clojure.set :only (difference)]
+        clj-time.core)
   (:import (org.joda.time DateTime)
            (org.joda.time.format DateTimeFormat DateTimeFormatter
                                  ISODateTimeFormat)))
 
-; The formatters map and show-printers idea are strait from chrono.
+; The formatters map and show-formatters idea are strait from chrono.
 
 (defvar formatters
   (into {} (map
-    (fn [[k #^DateTimeFormatter f]] [k (.withZone f #^DateTimeZone core/utc)])
+    (fn [[k #^DateTimeFormatter f]] [k (.withZone f #^DateTimeZone utc)])
     {:basic-date (ISODateTimeFormat/basicDate)
      :basic-date-time (ISODateTimeFormat/basicDateTime)
      :basic-date-time-no-ms (ISODateTimeFormat/basicDateTimeNoMillis)
@@ -97,12 +95,12 @@
     :time-parser})
 
 (defvar- printers
-  (set/difference (set (keys formatters)) parsers))
+  (difference (set (keys formatters)) parsers))
 
 (defn formatter
   "Returns a custom formatter for the given date-time pattern."
   [#^String fmts]
-  (.withZone (DateTimeFormat/forPattern fmts) #^DateTimeZone core/utc))
+  (.withZone (DateTimeFormat/forPattern fmts) #^DateTimeZone utc))
 
 (defn parse
   "Returns a DateTime instance in the UTC time zone obtained by parsing the
@@ -110,7 +108,7 @@
   [#^DateTimeFormatter fmt #^String s]
   (.parseDateTime fmt s))
 
-(defn print
+(defn unparse
   "Returns a string representing the given DateTime instance in UTC and in the
   form determined by the given formatter."
   [#^DateTimeFormatter fmt #^DateTime dt]
@@ -119,7 +117,7 @@
 (defn show-formatters
   "Shows how a given DateTime, or by default the current time, would be
   formatted with each of the available printing formatters."
-  ([] (show-formatters (core/now)))
+  ([] (show-formatters (now)))
   ([#^DateTime dt]
     (doseq [p printers]
       (let [fmt (formatters p)]

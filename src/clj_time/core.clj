@@ -7,21 +7,21 @@
      => (date-time 1986 10 14 4 3 27 456)
      #<DateTime 1986-10-14T04:03:27.456Z>
 
-   Less-signifigant fields can be omitted:
+   Less-significant fields can be omitted:
 
      => (date-time 1986 10 14)
      #<DateTime 1986-10-14T00:00:00.000Z>
 
    Get the current time with (now) and the start of the Unix epoch with (epcoh).
 
-   Once you have a date-time, use accessors like hour and second to access the
+   Once you have a date-time, use accessors like hour and sec to access the
    corresponding fields:
 
      => (hour (date-time 1986 10 14 22))
      22
 
    The date-time constructor always returns times in the UTC time zone. If you
-   want a time with the specified fields in a different time-zone, use
+   want a time with the specified fields in a different time zone, use
    from-time-zone:
    
      => (from-time-zone (date-time 1986 10 22) (time-zone-for-offset -2))
@@ -30,11 +30,11 @@
    If on the other hand you want a given absolute instant in time in a
    different time zone, use to-time-zone:
    
-    (to-time-zone (date-time 1986 10 22) (time-zone-for-offset -2))
-     => #<DateTime 1986-10-21T22:00:00.000-02:00>
+     => (to-time-zone (date-time 1986 10 22) (time-zone-for-offset -2))
+     #<DateTime 1986-10-21T22:00:00.000-02:00>
 
    In addition to time-zone-for-offset, you can use the time-zone-for-id and
-   default-time-zone functions and the utc Var to consturct or get DateTimeZone
+   default-time-zone functions and the utc Var to constgruct or get DateTimeZone
    instances.
 
    The functions after? and before? determine the relative position of two
@@ -50,24 +50,23 @@
      #<DateTime 1986-12-05T00:00:00.000Z>
 
    To represent the amount of time between two DateTime instances, use duration.
-   The in-seconds and in-minutes functions can then be used to describe this
-   duration in the coresponding temporal units:
+   The in-secs and in-minutes functions can then be used to describe this
+   duration in the corresponding temporal units:
 
      => (in-minutes (duration (date-time 1986 10 2) (date-time 1986 10 14)))
      17280
 
    An Interval is used to represent the span of time between two DateTime
-   instances. Construct one using interval, then query them using contains?,
+   instances. Construct one using interval, then query them using within?,
    overlaps?, and abuts?
 
-     => (contains? (interval (date-time 1986) (date-time 1990))
-                   (date-time 1987))
+     => (within? (interval (date-time 1986) (date-time 1990))
+                 (date-time 1987))
      true
 
-   Note that all functions in this namepsace work with Joda objects or ints. If
+   Note that all functions in this namespace work with Joda objects or ints. If
    you need to print or parse date-times, see clj-time.format. If you need to
    ceorce date-times to or from other types, see clj-time.coerce."
-  (:refer-clojure :exclude (second contains?))
   (:use [clojure.contrib.def :only (defvar)])
   (:import
     (org.joda.time DateTime DateTimeZone Period Duration Interval)))
@@ -89,7 +88,7 @@
    Specify the year, month of year, day of month, hour of day, minute if hour,
    second of minute, and millisecond of second. Note that month and day are
    1-indexed while hour, second, minute, and millis are 0-indexed.
-   Any number of least-signifigant components can be ommited, in which case
+   Any number of least-significant components can be ommited, in which case
    they will default to 1 or 0 as appropriate."
   ([year]
    (date-time year 1 1 0 0 0 0))
@@ -134,7 +133,7 @@
   [#^DateTime dt]
   (.getMinuteOfHour dt))
 
-(defn second
+(defn sec
   "Return the second-of-minute component of the given DateTime."
   [#^DateTime dt]
   (.getSecondOfMinute dt))
@@ -215,10 +214,15 @@
   [#^Integer n]
   (Period/minutes n))
 
-(defn seconds
+(defn secs
   "Returns a Period representing the given number of seconds."
   [#^Integer n]
   (Period/seconds n))
+
+(defn millis
+  "Returns a Period representing the given number of milliseconds."
+  [#^Integer n]
+  (Period/millis n))
 
 (defn plus
   "Returns a new DateTime corresponding to the given DateTime moved forwards by
@@ -242,7 +246,7 @@
   [#^DateTime dt-a #^DateTime dt-b]
   (Duration. dt-a dt-b))
 
-(defn in-seconds
+(defn in-secs
   "Returns the number of standard seconds in the given Duration."
   [#^Duration d]
   (.. d toStandardSeconds getSeconds))
@@ -250,7 +254,7 @@
 (defn in-minutes
   "Returns the number of standard minutes in the given Duration."
   [#^Duration d]
-  (int (/ (in-seconds d) 60)))
+  (int (/ (in-secs d) 60)))
 
 (defn interval
   "Returns an interval representing the span between the two given DateTimes.
@@ -258,7 +262,7 @@
   [#^DateTime dt-a #^DateTime dt-b]
   (Interval. dt-a dt-b))
 
-(defn contains?
+(defn within?
   "Returns true if the given Interval contains the given DateTime. Note that
    if the DateTime is exactly equal to the end of the interval, this function
    returns false."

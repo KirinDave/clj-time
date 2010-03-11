@@ -1,13 +1,12 @@
 (ns clj-time.coerce
-  "Utilites to coerce Joda DateTimes to and from various other types. For
-   example, to convert a Joda DateTime to and from a Java long:
+  "Utilites to coerce Joda DateTime instances to and from various other types.
+   For example, to convert a Joda DateTime to and from a Java long:
    
      => (to-long (date-time 1998 4 25))
      893462400000
      
      => (from-long 893462400000)
      #<DateTime 1998-04-25T00:00:00.000Z>"
-  (:refer-clojure :exclude (second contains?))
   (:use clj-time.core)
   (:import (org.joda.time DateTime DateTimeZone)))
 

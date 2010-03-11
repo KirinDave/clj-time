@@ -1,5 +1,4 @@
 (ns clj-time.coerce-test
-  (:refer-clojure :exclude (second contains?))
   (:use clojure.test
         (clj-time core coerce)))
 
