@@ -23,7 +23,8 @@
    (date-time year month day hour 0 0))
   ([year month day hour minute]
    (date-time year month day hour minute 0))
-  ([year month day hour minute second]
+  ([#^Integer year #^Integer month #^Integer day #^Integer hour
+    #^Integer minute #^Integer second]
    (DateTime. year month day hour minute second 0 utc)))
 
 (defn year [#^DateTime dt]
