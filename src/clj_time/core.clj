@@ -3,17 +3,14 @@
   (:import
     (org.joda.time DateTime DateTimeZone Period Interval)))
 
-(def utc (DateTimeZone/UTC))
+(def #^{:tag DateTimeZone} utc
+  (DateTimeZone/UTC))
 
-(defn now
-  "Returns a DateTime for the current time in UTC."
-  []
-  (DateTime. #^DateTimeZone utc))
+(defn now []
+  (DateTime. utc))
 
-(defn epoch
-  "Returns a DateTime corresponding to the begining of the epoch in UTC."
-  []
-  (DateTime. (long 0) #^DateTimeZone utc))
+(defn epoch []
+  (DateTime. (long 0) utc))
 
 (defn datetime
   ([year]
@@ -27,7 +24,7 @@
   ([year month day hour minute]
    (datetime year month day hour minute 0))
   ([year month day hour minute second]
-   (DateTime. year month day hour minute second 0)))
+   (DateTime. year month day hour minute second 0 utc)))
 
 (defn year [#^DateTime dt]
   (.getYear dt))
