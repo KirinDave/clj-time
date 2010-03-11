@@ -49,12 +49,12 @@
      => (plus (date-time 1986 10 14) (months 1) (weeks 3))
      #<DateTime 1986-12-05T00:00:00.000Z>
 
-   To represent the amount of time between two DateTime instances, use period.
-   The in-* functions can then be used to describe this period in terms of
-   various temporal units:
+   To represent the amount of time between two DateTime instances, use duration.
+   The in-seconds and in-minutes functions can then be used to describe this
+   duration in the coresponding temporal units:
 
-     => (in-hours (period (date-time 1986 10 2) (date-time 1986 10 14)))
-     288
+     => (in-minutes (duration (date-time 1986 10 2) (date-time 1986 10 14)))
+     17280
 
    An Interval is used to represent the span of time between two DateTime
    instances. Construct one using interval, then query them using contains?,
@@ -70,7 +70,7 @@
   (:refer-clojure :exclude (second contains?))
   (:use [clojure.contrib.def :only (defvar)])
   (:import
-    (org.joda.time DateTime DateTimeZone Period Interval)))
+    (org.joda.time DateTime DateTimeZone Period Duration Interval)))
 
 (defvar utc
   (DateTimeZone/UTC)
@@ -236,36 +236,21 @@
   ([dt p & ps]
    (reduce #(minus %1 %2) (minus dt p) ps)))
 
-(defn period
-  "Returns a period corresponding to the difference between the two given
+(defn duration
+  "Returns a Duration corresponding to the difference between the two given
    DateTimes."
   [#^DateTime dt-a #^DateTime dt-b]
-  (Period. dt-a dt-b))
-
-(defn in-weeks
-  "Returns the number of standard weeks in the given Period."
-  [#^Period p]
-  (.. p toStandardWeeks getWeeks))
-
-(defn in-days
-  "Returns the number of standard days in the given Period."
-  [#^Period p]
-  (.. p toStandardDays getDays))
-
-(defn in-hours
-  "Returns the number of standard hours in the given Period."
-  [#^Period p]
-  (.. p toStandardHours getHours))
-
-(defn in-minutes
-  "Returns the number of standard minutes in the given Period."
-  [#^Period p]
-  (.. p toStandardMinutes getMinutes))
+  (Duration. dt-a dt-b))
 
 (defn in-seconds
-  "Returns the number of standard seconds in the given Period."
-  [#^Period p]
-  (.. p toStandardSeconds getSeconds))
+  "Returns the number of standard seconds in the given Duration."
+  [#^Duration d]
+  (.. d toStandardSeconds getSeconds))
+
+(defn in-minutes
+  "Returns the number of standard minutes in the given Duration."
+  [#^Duration d]
+  (int (/ (in-seconds d) 60)))
 
 (defn interval
   "Returns an interval representing the span between the two given DateTimes.

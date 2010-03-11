@@ -84,11 +84,8 @@
   (is (= (date-time 1986 10 14 4 2)
          (minus (date-time 1986 10 14 6 5) (hours 2) (minutes 3)))))
 
-(deftest test-period-in
-  (let [p (period (date-time 1986 10 14 12 5 4) (date-time 1986 11 3  22 2 6))]
-    (is (= 2       (in-weeks p)))
-    (is (= 20      (in-days p)))
-    (is (= 489     (in-hours p)))
+(deftest test-duration-in
+  (let [p (duration (date-time 1986 10 14 12 5 4) (date-time 1986 11 3  22 2 6))]
     (is (= 29397   (in-minutes p)))
     (is (= 1763822 (in-seconds p)))))
 
