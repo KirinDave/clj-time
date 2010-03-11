@@ -18,14 +18,16 @@
     (is (= 1    (day    d)))
     (is (= 0    (hour   d)))
     (is (= 0    (minute d)))
-    (is (= 0    (second d))))
-  (let [d (date-time 1986 10 14 4 3 2)]
+    (is (= 0    (second d)))
+    (is (= 0    (milli  d))))
+  (let [d (date-time 1986 10 14 4 3 2 1)]
     (is (= 1986 (year   d)))
     (is (= 10   (month  d)))
     (is (= 14   (day    d)))
     (is (= 4    (hour   d)))
     (is (= 3    (minute d)))
-    (is (= 2    (second d)))))
+    (is (= 2    (second d)))
+    (is (= 1    (milli  d)))))
 
 (deftest test-time-zone-for-offset
   (is (= utc (time-zone-for-offset 0)))
