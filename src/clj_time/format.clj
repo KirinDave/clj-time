@@ -1,4 +1,29 @@
 (ns clj-time.format
+  "Utilities for printing and parsing DateTimes as Strings.
+
+   Printing and parsing are controlled by formatters. You can either use one
+   of the built in ISO8601 formatters or define your own, e.g.:
+
+     (def built-in-formatter (formatters :basic-date-time))
+     (def custom-formatter (formatter \"yyyyMMdd\"))
+
+   To see a list of available built-in formatters and an example of a date-time
+   printed in their format:
+
+     (show-printers)
+
+    Once you have a formatter, printing and parsing are straitforward:
+
+      => (parse custom-formatter \"20100311\")
+      #<DateTime 2010-03-11T00:00:00.000Z>
+
+      => (print custom-formatter (date-time 2010 10 3))
+      \"20101003\"
+
+    Note that print returns a String; it does not write to *out* or some other
+    stream. Also, note that the parse function always returns a DateTime
+    instance with a UTC time zone, and the print function always represents a
+    given DateTime instance in UTC."
   (:refer-clojure :exclude (second contains? print))
   (:use [clojure.contrib.def :only (defvar defvar-)])
   (:require [clj-time.core :as core]
@@ -74,19 +99,27 @@
 (defvar- printers
   (set/difference (set (keys formatters)) parsers))
 
-(defn formatter [#^String fmts]
+(defn formatter
+  "Returns a custom formatter for the given date-time pattern."
+  [#^String fmts]
   (.withZone (DateTimeFormat/forPattern fmts) #^DateTimeZone core/utc))
 
-(defn parse [#^DateTimeFormatter fmt #^String ds]
-  (.parseDateTime fmt ds))
+(defn parse
+  "Returns a DateTime instance in the UTC time zone obtained by parsing the
+   given string according to the given formatter."
+  [#^DateTimeFormatter fmt #^String s]
+  (.parseDateTime fmt s))
 
-(defn print [#^DateTimeFormatter fmt #^DateTime dt]
+(defn print
+  "Returns a string representing the given DateTime instance in UTC and in the
+  form determined by the given formatter."
+  [#^DateTimeFormatter fmt #^DateTime dt]
   (.print fmt dt))
 
-(defn show-printers
+(defn show-formatters
   "Shows how a given DateTime, or by default the current time, would be
   formatted with each of the available printing formatters."
-  ([] (show-printers (core/now)))
+  ([] (show-formatters (core/now)))
   ([#^DateTime dt]
     (doseq [p printers]
       (let [fmt (formatters p)]
