@@ -169,8 +169,8 @@
 
 (defn from-time-zone
   "Returns a new DateTime corresponding to the same point in calendar time as
-  the given DateTime, but for a correspondingly different absolute instant in
-  time."
+   the given DateTime, but for a correspondingly different absolute instant in
+   time."
   [#^DateTime dt #^DateTimeZone tz]
   (.withZoneRetainFields dt tz))
 
