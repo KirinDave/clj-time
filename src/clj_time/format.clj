@@ -119,6 +119,6 @@
   formatted with each of the available printing formatters."
   ([] (show-formatters (now)))
   ([#^DateTime dt]
-    (doseq [p printers]
+    (doseq [p (sort printers)]
       (let [fmt (formatters p)]
-        (printf "%-40s%s\n" p (print fmt dt))))))
+        (printf "%-40s%s\n" p (unparse fmt dt))))))
