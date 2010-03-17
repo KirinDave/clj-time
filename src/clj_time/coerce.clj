@@ -26,7 +26,7 @@
 (defn to-date
   "Returns a Java Date object corresponding to the given DateTime instance."
   [#^DateTime dt]
-  (Date. (to-long dt)))
+  (Date. #^Long (to-long dt)))
 
 (defn from-date
   "Returns a DateTime instance in the UTC time zone corresponding to the given
