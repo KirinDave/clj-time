@@ -239,6 +239,28 @@
   ([dt p & ps]
    (reduce #(minus %1 %2) (minus dt p) ps)))
 
+(defn interval
+  "Returns an interval representing the span between the two given DateTimes.
+   Note that intervals are closed on the left and open on the right."
+  [#^DateTime dt-a #^DateTime dt-b]
+  (Interval. dt-a dt-b))
+
+(defn start
+  "Returns the start DateTime of an Interval."
+  [#^Interval in]
+  (.getStart in))
+
+(defn end
+  "Returns the end DateTime of an Interval."
+  [#^Interval in]
+  (.getEnd in))
+
+(defn extend
+  "Returns an Interval with an end DateTime the specified Period after the end
+   of the given Interval"
+  [#^Interval in & by]
+  (.withEnd in (apply plus (end in) by)))
+
 (defn in-secs
   "Returns the number of standard seconds in the given Interval."
   [#^Interval in]
@@ -248,12 +270,6 @@
   "Returns the number of standard minutes in the given Interval."
   [#^Interval in]
   (int (/ (in-secs in) 60)))
-
-(defn interval
-  "Returns an interval representing the span between the two given DateTimes.
-   Note that intervals are closed on the left and open on the right."
-  [#^DateTime dt-a #^DateTime dt-b]
-  (Interval. dt-a dt-b))
 
 (defn within?
   "Returns true if the given Interval contains the given DateTime. Note that
