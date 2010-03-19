@@ -49,13 +49,6 @@
      => (plus (date-time 1986 10 14) (months 1) (weeks 3))
      #<DateTime 1986-12-05T00:00:00.000Z>
 
-   To represent the amount of time between two DateTime instances, use duration.
-   The in-secs and in-minutes functions can then be used to describe this
-   duration in the corresponding temporal units:
-
-     => (in-minutes (duration (date-time 1986 10 2) (date-time 1986 10 14)))
-     17280
-
    An Interval is used to represent the span of time between two DateTime
    instances. Construct one using interval, then query them using within?,
    overlaps?, and abuts?
@@ -63,13 +56,19 @@
      => (within? (interval (date-time 1986) (date-time 1990))
                  (date-time 1987))
      true
+   
+   To find the amount of time encompased by an interval, use in-secs and
+   in-minutes:
+   
+     => (in-minutes (duration (date-time 1986 10 2) (date-time 1986 10 14)))
+     17280
 
    Note that all functions in this namespace work with Joda objects or ints. If
    you need to print or parse date-times, see clj-time.format. If you need to
    ceorce date-times to or from other types, see clj-time.coerce."
   (:use [clojure.contrib.def :only (defvar)])
   (:import
-    (org.joda.time DateTime DateTimeZone Period Duration Interval)))
+    (org.joda.time DateTime DateTimeZone Period Interval)))
 
 (defvar utc
   (DateTimeZone/UTC)
@@ -240,23 +239,15 @@
   ([dt p & ps]
    (reduce #(minus %1 %2) (minus dt p) ps)))
 
-(defn duration
-  "Returns a Duration corresponding to the difference between the two given
-   DateTimes."
-  [#^DateTime dt-a #^DateTime dt-b]
-  (Duration. dt-a dt-b))
-
 (defn in-secs
-  "Returns the number of standard seconds in the given Duration or Interval."
-  [len]
-  (if (instance? Interval len)
-    (in-secs (.toDuration #^Interval len))
-    (.. #^Duration len toStandardSeconds getSeconds)))
+  "Returns the number of standard seconds in the given Interval."
+  [#^Interval in]
+  (.. #^Interval in toDuration toStandardSeconds getSeconds))
 
 (defn in-minutes
-  "Returns the number of standard minutes in the given Duration or Interval."
-  [#^Duration d]
-  (int (/ (in-secs d) 60)))
+  "Returns the number of standard minutes in the given Interval."
+  [#^Interval in]
+  (int (/ (in-secs in) 60)))
 
 (defn interval
   "Returns an interval representing the span between the two given DateTimes.
