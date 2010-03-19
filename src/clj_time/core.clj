@@ -247,12 +247,14 @@
   (Duration. dt-a dt-b))
 
 (defn in-secs
-  "Returns the number of standard seconds in the given Duration."
-  [#^Duration d]
-  (.. d toStandardSeconds getSeconds))
+  "Returns the number of standard seconds in the given Duration or Interval."
+  [len]
+  (if (instance? Interval len)
+    (in-secs (.toDuration #^Interval len))
+    (.. #^Duration len toStandardSeconds getSeconds)))
 
 (defn in-minutes
-  "Returns the number of standard minutes in the given Duration."
+  "Returns the number of standard minutes in the given Duration or Interval."
   [#^Duration d]
   (int (/ (in-secs d) 60)))
 
