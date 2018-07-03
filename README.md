@@ -4,7 +4,7 @@ A date and time library for Clojure, wrapping the [Joda Time](http://joda-time.s
 
 ## Installation
 
-`clj-time` is available as a Maven artifact via [Clojars](http://clojars.org/clj-time).
+`[clj-time "0.14.4"]` `clj-time` is available as a Maven artifact via [Clojars](http://clojars.org/clj-time).
 
 ## Usage
 
