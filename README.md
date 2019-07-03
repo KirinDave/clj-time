@@ -2,6 +2,8 @@
 
 A date and time library for Clojure, wrapping the [Joda Time](http://joda-time.sourceforge.net/) library.
 
+*You should not be using this version of clj-time.* This is a library I wrote a long time ago, and then people much more dedicated and smarter took it and continued the work. I keep this here really just to occasionally remind myself that if I try I can write code people would like to use. Sorry for any confusion, please go use a newer version of the library!
+
 ## Installation
 
 `clj-time` is available as a Maven artifact via [Clojars](http://clojars.org/clj-time).
