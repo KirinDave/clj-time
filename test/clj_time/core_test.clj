@@ -49,6 +49,14 @@
     (is (= 6 (hour dt2)))
     (is (> (.getMillis dt1) (.getMillis dt2)))))
 
+(deftest test-set-timezone!
+  (let [default-tz  *default-timezone*
+        tz (time-zone-for-offset -2)]
+    (set-timezone! tz)
+    (is (not= *default-timezone* default-tz))
+    (is (= *default-timezone* tz))
+    (set-timezone! utc)))
+
 (deftest test-after?
   (is (after? (date-time 1987) (date-time 1986)))
   (is (not (after? (date-time 1986) (date-time 1987))))
